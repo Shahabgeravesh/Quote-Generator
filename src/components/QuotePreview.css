@@ -1,0 +1,400 @@
+.quote-preview {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.preview-controls {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.back-btn,
+.edit-btn,
+.download-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.back-btn {
+  background: #6c757d;
+  color: white;
+}
+
+.back-btn:hover {
+  background: #5a6268;
+  transform: translateY(-2px);
+}
+
+.edit-btn {
+  background: #17a2b8;
+  color: white;
+}
+
+.edit-btn:hover {
+  background: #138496;
+  transform: translateY(-2px);
+}
+
+.download-btn {
+  background: #28a745;
+  color: white;
+}
+
+.download-btn:hover {
+  background: #218838;
+  transform: translateY(-2px);
+}
+
+.quote-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.quote-document {
+  padding: 40px;
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  line-height: 1.5;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.quote-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 40px;
+  border-bottom: 3px solid #1a4a8c;
+  padding-bottom: 25px;
+}
+
+.company-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo-image {
+  max-width: 400px;
+  height: auto;
+}
+
+.company-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.company-name {
+  color: #1a4a8c;
+  margin: 0 0 8px 0;
+  font-size: 36px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.company-tagline {
+  color: #666;
+  margin: 0;
+  font-size: 18px;
+  font-style: italic;
+}
+
+.quote-info {
+  text-align: right;
+}
+
+.quote-number h2 {
+  color: #1a4a8c;
+  margin: 0 0 10px 0;
+  font-size: 28px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.quote-date {
+  color: #666;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+/* Client Section */
+.client-section {
+  margin-bottom: 25px;
+  padding: 8px 0;
+}
+
+.client-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.to-label {
+  color: #1a4a8c;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.client-name {
+  color: #2c3e50;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.subject-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.subject-label {
+  color: #1a4a8c;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.subject-text {
+  color: #2c3e50;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Quote Content */
+.quote-content {
+  margin-top: 30px;
+}
+
+.quote-body {
+  margin-bottom: 30px;
+}
+
+.quote-body p {
+  margin-bottom: 15px;
+  text-align: justify;
+  color: #2c3e50;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+/* Services Section */
+.services-section {
+  margin: 30px 0;
+}
+
+.services-section h3 {
+  color: #1a4a8c;
+  margin: 0 0 15px 0;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.table-container {
+  margin: 20px 0;
+}
+
+.quote-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  border: 2px solid #1a4a8c;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.quote-items-table th {
+  background: linear-gradient(135deg, #1a4a8c 0%, #2c5aa0 100%);
+  border: 1px solid #1a4a8c;
+  padding: 12px 10px;
+  text-align: left;
+  font-weight: bold;
+  color: white;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.quote-items-table td {
+  border: 1px solid #e9ecef;
+  padding: 10px;
+  font-size: 15px;
+  color: #2c3e50;
+  background: white;
+}
+
+.quote-items-table tr:nth-child(even) td {
+  background: #f8f9fa;
+}
+
+.service-name {
+  font-weight: 600;
+  color: #1a4a8c;
+}
+
+.service-description {
+  font-style: italic;
+}
+
+.quantity, .unit-price, .total-price {
+  text-align: center;
+  font-weight: 600;
+}
+
+.total-price {
+  color: #1a4a8c;
+  font-weight: bold;
+}
+
+.quote-items-table th:first-child,
+.quote-items-table td:first-child {
+  width: 15%;
+}
+
+.quote-items-table th:nth-child(2),
+.quote-items-table td:nth-child(2) {
+  width: 35%;
+}
+
+.quote-items-table th:nth-child(3),
+.quote-items-table td:nth-child(3),
+.quote-items-table th:nth-child(4),
+.quote-items-table td:nth-child(4),
+.quote-items-table th:nth-child(5),
+.quote-items-table td:nth-child(5) {
+  width: 12.5%;
+  text-align: center;
+}
+
+
+
+/* Signature Section */
+.signature-section {
+  margin: 35px 0 30px 0;
+  padding-top: 25px;
+}
+
+.signature-section > p {
+  color: #1a4a8c;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0 0 12px 0;
+  text-align: left;
+  margin-left: 20px;
+}
+
+.signature-box {
+  text-align: left;
+  margin-left: 0;
+}
+
+.signature-image {
+  max-width: 350px;
+  height: auto;
+  margin: 0 0 12px 0;
+  opacity: 1;
+}
+
+.signature-title {
+  color: #666;
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+.signature-company {
+  color: #1a4a8c;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 5px 0 0 0;
+}
+
+/* Footer */
+.quote-footer {
+  margin-top: 35px;
+  padding-top: 25px;
+  border-top: 3px solid #1a4a8c;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-image {
+  text-align: center;
+}
+
+.footer-logo {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.2));
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+  margin: 20px 0;
+}
+
+.footer-logo:hover {
+  transform: scale(1.02);
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.25));
+}
+
+@media print {
+  .preview-controls {
+    display: none;
+  }
+  
+  .quote-container {
+    box-shadow: none;
+    border-radius: 0;
+  }
+  
+  .quote-document {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .quote-preview {
+    padding: 10px;
+  }
+  
+  .quote-document {
+    padding: 20px;
+  }
+  
+  .quote-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .quote-meta {
+    text-align: left;
+    margin-top: 20px;
+  }
+  
+  .preview-controls {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .back-btn,
+  .edit-btn,
+  .download-btn {
+    width: 100%;
+    max-width: 200px;
+  }
+}
