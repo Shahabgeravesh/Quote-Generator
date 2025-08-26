@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/Quote-Generator-AUS/static/css/main.ba0fb2a6.css",
+    "main.js": "/Quote-Generator-AUS/static/js/main.35f2dd28.js",
+    "static/js/977.9405b508.chunk.js": "/Quote-Generator-AUS/static/js/977.9405b508.chunk.js",
+    "static/js/455.658a0e1a.chunk.js": "/Quote-Generator-AUS/static/js/455.658a0e1a.chunk.js",
+    "static/js/453.90a86d33.chunk.js": "/Quote-Generator-AUS/static/js/453.90a86d33.chunk.js",
+    "index.html": "/Quote-Generator-AUS/index.html",
+    "main.ba0fb2a6.css.map": "/Quote-Generator-AUS/static/css/main.ba0fb2a6.css.map",
+    "main.35f2dd28.js.map": "/Quote-Generator-AUS/static/js/main.35f2dd28.js.map",
+    "977.9405b508.chunk.js.map": "/Quote-Generator-AUS/static/js/977.9405b508.chunk.js.map",
+    "455.658a0e1a.chunk.js.map": "/Quote-Generator-AUS/static/js/455.658a0e1a.chunk.js.map",
+    "453.90a86d33.chunk.js.map": "/Quote-Generator-AUS/static/js/453.90a86d33.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ba0fb2a6.css",
+    "static/js/main.35f2dd28.js"
+  ]
+}
