@@ -55,6 +55,16 @@
   transform: translateY(-2px);
 }
 
+.download-btn.compact {
+  background: #ffc107;
+  color: #212529;
+}
+
+.download-btn.compact:hover {
+  background: #e0a800;
+  transform: translateY(-2px);
+}
+
 .quote-container {
   background: white;
   border-radius: 8px;

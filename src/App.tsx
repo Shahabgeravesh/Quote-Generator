@@ -10,7 +10,7 @@ function App() {
     re: '',
     body: '',
     tableData: [
-      { item: '', description: '', quantity: '', unitPrice: '', total: '' }
+      { time: '', description: '', quantity: '', unitPrice: '', total: '' }
     ]
   });
 

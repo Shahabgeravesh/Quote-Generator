@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './QuoteForm.css';
 
 interface TableRow {
-  item: string;
+  time: string;
   description: string;
   quantity: string;
   unitPrice: string;
@@ -37,18 +37,34 @@ const QuoteForm: React.FC<QuoteFormProps> = ({ onSubmit, initialData }) => {
   };
 
   const handleTableRowChange = (index: number, field: keyof TableRow, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      tableData: prev.tableData.map((row, i) => 
-        i === index ? { ...row, [field]: value } : row
-      )
-    }));
+    setFormData(prev => {
+      const newTableData = prev.tableData.map((row, i) => {
+        if (i === index) {
+          const updatedRow = { ...row, [field]: value };
+          
+          // Auto-calculate total when quantity or unit price changes
+          if (field === 'quantity' || field === 'unitPrice') {
+            const quantity = parseFloat(updatedRow.quantity) || 0;
+            const unitPrice = parseFloat(updatedRow.unitPrice) || 0;
+            updatedRow.total = (quantity * unitPrice).toFixed(2);
+          }
+          
+          return updatedRow;
+        }
+        return row;
+      });
+      
+      return {
+        ...prev,
+        tableData: newTableData
+      };
+    });
   };
 
   const addTableRow = () => {
     setFormData(prev => ({
       ...prev,
-      tableData: [...prev.tableData, { item: '', description: '', quantity: '', unitPrice: '', total: '' }]
+      tableData: [...prev.tableData, { time: '', description: '', quantity: '', unitPrice: '', total: '' }]
     }));
   };
 
@@ -123,8 +139,8 @@ const QuoteForm: React.FC<QuoteFormProps> = ({ onSubmit, initialData }) => {
             <table className="quote-table">
               <thead>
                 <tr>
-                  <th>Item</th>
                   <th>Description</th>
+                  <th>Time</th>
                   <th>Quantity</th>
                   <th>Unit Price</th>
                   <th>Total</th>
@@ -137,15 +153,15 @@ const QuoteForm: React.FC<QuoteFormProps> = ({ onSubmit, initialData }) => {
                     <td>
                       <input
                         type="text"
-                        value={row.item}
-                        onChange={(e) => handleTableRowChange(index, 'item', e.target.value)}
+                        value={row.description}
+                        onChange={(e) => handleTableRowChange(index, 'description', e.target.value)}
                       />
                     </td>
                     <td>
                       <input
                         type="text"
-                        value={row.description}
-                        onChange={(e) => handleTableRowChange(index, 'description', e.target.value)}
+                        value={row.time}
+                        onChange={(e) => handleTableRowChange(index, 'time', e.target.value)}
                       />
                     </td>
                     <td>
@@ -165,10 +181,10 @@ const QuoteForm: React.FC<QuoteFormProps> = ({ onSubmit, initialData }) => {
                     </td>
                     <td>
                       <input
-                        type="number"
-                        step="0.01"
+                        type="text"
                         value={row.total}
-                        onChange={(e) => handleTableRowChange(index, 'total', e.target.value)}
+                        readOnly
+                        className="total-field"
                       />
                     </td>
                     <td>

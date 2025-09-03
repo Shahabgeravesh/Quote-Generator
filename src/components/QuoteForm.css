@@ -95,6 +95,13 @@
   border-color: #3498db;
 }
 
+.total-field {
+  background-color: #f8f9fa;
+  color: #495057;
+  font-weight: 600;
+  cursor: not-allowed;
+}
+
 .remove-btn {
   background: #e74c3c;
   color: white;
