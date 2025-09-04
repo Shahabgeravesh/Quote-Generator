@@ -14,6 +14,7 @@ interface QuoteData {
   managerName: string;
   re: string;
   body: string;
+  taxPercentage: string;
   tableData: TableRow[];
 }
 
@@ -129,6 +130,20 @@ const QuoteForm: React.FC<QuoteFormProps> = ({ onSubmit, initialData }) => {
               onChange={(e) => handleInputChange('body', e.target.value)}
               rows={6}
               required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="taxPercentage">Tax Percentage (optional):</label>
+            <input
+              type="number"
+              id="taxPercentage"
+              value={formData.taxPercentage}
+              onChange={(e) => handleInputChange('taxPercentage', e.target.value)}
+              step="0.01"
+              min="0"
+              max="100"
+              placeholder="e.g., 10 for 10%"
             />
           </div>
         </div>

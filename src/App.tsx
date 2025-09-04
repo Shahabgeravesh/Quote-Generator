@@ -9,6 +9,7 @@ function App() {
     managerName: '',
     re: '',
     body: '',
+    taxPercentage: '',
     tableData: [
       { time: '', description: '', quantity: '', unitPrice: '', total: '' }
     ]

@@ -16,6 +16,7 @@ interface QuoteData {
   managerName: string;
   re: string;
   body: string;
+  taxPercentage: string;
   tableData: TableRow[];
 }
 
@@ -38,96 +39,25 @@ const QuotePreview: React.FC<QuotePreviewProps> = ({ data, onBack, onEdit }) => 
     });
   };
 
-  const generateCompactPDF = () => {
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    
-    // Set font and colors
-    pdf.setFont('helvetica');
-    pdf.setFontSize(12);
-    
-    let yPosition = 20;
-    const margin = 20;
-    const pageWidth = 210;
-    const contentWidth = pageWidth - (2 * margin);
-    
-    // Header
-    pdf.setFontSize(18);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text('Quote', pageWidth / 2, yPosition, { align: 'center' });
-    
-    yPosition += 15;
-    
-    // Date
-    pdf.setFontSize(12);
-    pdf.setFont('helvetica', 'normal');
-    pdf.text(`Date: ${formatDate(data.date)}`, margin, yPosition);
-    
-    yPosition += 10;
-    
-    // Manager Name
-    pdf.text(`To: ${data.managerName}`, margin, yPosition);
-    yPosition += 10;
-    
-    // Subject
-    pdf.text(`Subject: ${data.re}`, margin, yPosition);
-    yPosition += 15;
-    
-    // Body text
-    pdf.setFontSize(11);
-    const bodyLines = pdf.splitTextToSize(data.body, contentWidth);
-    pdf.text(bodyLines, margin, yPosition);
-    yPosition += (bodyLines.length * 5) + 10;
-    
-    // Table header
-    if (data.tableData.length > 0) {
-      pdf.setFontSize(12);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('Services & Pricing', margin, yPosition);
-      yPosition += 8;
-      
-      // Table columns
-      const colWidths = [40, 60, 25, 30, 25];
-      const colPositions = [margin];
-      for (let i = 1; i < colWidths.length; i++) {
-        colPositions.push(colPositions[i-1] + colWidths[i-1]);
-      }
-      
-      // Table headers
-      pdf.setFontSize(10);
-      const headers = ['Service', 'Description', 'Qty', 'Price', 'Total'];
-      headers.forEach((header, index) => {
-        pdf.text(header, colPositions[index], yPosition);
-      });
-      yPosition += 8;
-      
-      // Table data
-      pdf.setFont('helvetica', 'normal');
-      data.tableData.forEach(row => {
-        if (yPosition > 250) { // Check if we need a new page
-          pdf.addPage();
-          yPosition = 20;
-        }
-        
-        const rowData = [
-          row.description || '',
-          row.time || '',
-          row.quantity || '',
-          row.unitPrice || '',
-          row.total || ''
-        ];
-        
-        rowData.forEach((cell, index) => {
-          const text = pdf.splitTextToSize(cell, colWidths[index] - 2);
-          pdf.text(text, colPositions[index], yPosition);
-        });
-        
-        yPosition += Math.max(...rowData.map((cell, index) => 
-          pdf.splitTextToSize(cell, colWidths[index] - 2).length
-        )) * 4 + 2;
-      });
-    }
-    
-    pdf.save('chicago-oceo-quote-compact.pdf');
+  // Calculate subtotal from all table rows
+  const calculateSubtotal = () => {
+    return data.tableData.reduce((sum, row) => {
+      return sum + (parseFloat(row.total) || 0);
+    }, 0);
+  };
+
+  // Calculate tax amount
+  const calculateTaxAmount = () => {
+    const subtotal = calculateSubtotal();
+    const taxPercentage = parseFloat(data.taxPercentage) || 0;
+    return (subtotal * taxPercentage) / 100;
+  };
+
+  // Calculate grand total
+  const calculateGrandTotal = () => {
+    const subtotal = calculateSubtotal();
+    const taxAmount = calculateTaxAmount();
+    return subtotal + taxAmount;
   };
 
   const generatePDF = async () => {
@@ -135,43 +65,63 @@ const QuotePreview: React.FC<QuotePreviewProps> = ({ data, onBack, onEdit }) => 
 
     try {
       const canvas = await html2canvas(quoteRef.current, {
-        scale: 1.5, // Reduced from 2 to 1.5 for smaller file size
+        scale: 2, // High scale for crisp quality
         useCORS: true,
         allowTaint: true,
-        backgroundColor: '#ffffff', // Ensure white background
-        imageTimeout: 0, // No timeout for images
-        logging: false, // Disable logging for production
-        removeContainer: true, // Clean up after rendering
-        foreignObjectRendering: false // Better compatibility
+        backgroundColor: '#ffffff',
+        imageTimeout: 0,
+        logging: false,
+        removeContainer: true,
+        foreignObjectRendering: false,
+        // High quality settings
+        width: 1200, // High resolution width
+        height: undefined, // Auto height
+        scrollX: 0,
+        scrollY: 0
       });
 
-      // Convert to JPEG with compression instead of PNG
-      const imgData = canvas.toDataURL('image/jpeg', 0.8); // JPEG with 80% quality
+      // Convert to PNG for maximum quality
+      const imgData = canvas.toDataURL('image/png', 1.0); // PNG for best quality
       
       const pdf = new jsPDF('p', 'mm', 'a4');
-      const imgWidth = 210;
-      const pageHeight = 295;
+      // A4 dimensions: 210mm x 297mm
+      const pageWidth = 210;
+      const pageHeight = 297;
+      const margin = 5; // Minimal margins for maximum content space
+      const imgWidth = pageWidth - (2 * margin); // 200mm
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
+      
+      // Check if content fits on one page
+      const maxHeight = pageHeight - (2 * margin); // 287mm
+      
+      if (imgHeight <= maxHeight) {
+        // Content fits on one page - use full quality
+        pdf.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight, undefined, 'FAST');
+      } else {
+        // Content is too tall - use multiple pages but maintain quality
+        let heightLeft = imgHeight;
+        let position = 0;
 
-      let position = 0;
+        // First page
+        pdf.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight, undefined, 'FAST');
+        heightLeft -= (pageHeight - (2 * margin));
 
-      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST'); // Use FAST compression
-      heightLeft -= pageHeight;
-
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
-        heightLeft -= pageHeight;
+        // Additional pages if needed
+        while (heightLeft >= 0) {
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, 'PNG', margin, margin + position, imgWidth, imgHeight, undefined, 'FAST');
+          heightLeft -= (pageHeight - (2 * margin));
+        }
       }
 
-      pdf.save('chicago-oceo-quote.pdf');
+      pdf.save(`quote-${data.managerName.replace(/[^a-zA-Z0-9]/g, '-')}-${formatDate(data.date).replace(/[^a-zA-Z0-9]/g, '-')}.pdf`);
     } catch (error) {
       console.error('Error generating PDF:', error);
       alert('Error generating PDF. Please try again.');
     }
   };
+
 
   return (
     <div className="quote-preview">
@@ -183,10 +133,7 @@ const QuotePreview: React.FC<QuotePreviewProps> = ({ data, onBack, onEdit }) => 
           Edit Quote
         </button>
         <button onClick={generatePDF} className="download-btn">
-          Download PDF (Standard)
-        </button>
-        <button onClick={generateCompactPDF} className="download-btn compact">
-          Download PDF (Compact)
+          Download PDF
         </button>
       </div>
 
@@ -253,7 +200,25 @@ const QuotePreview: React.FC<QuotePreviewProps> = ({ data, onBack, onEdit }) => 
               </div>
             </div>
 
-
+            {/* Tax and Totals Section */}
+            <div className="totals-section">
+              <div className="totals-container">
+                <div className="total-row">
+                  <span className="total-label">Subtotal:</span>
+                  <span className="total-value">${calculateSubtotal().toFixed(2)}</span>
+                </div>
+                {data.taxPercentage && parseFloat(data.taxPercentage) > 0 && (
+                  <div className="total-row">
+                    <span className="total-label">Tax ({data.taxPercentage}%):</span>
+                    <span className="total-value">${calculateTaxAmount().toFixed(2)}</span>
+                  </div>
+                )}
+                <div className="total-row grand-total">
+                  <span className="total-label">Total:</span>
+                  <span className="total-value">${calculateGrandTotal().toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
 
             {/* Signature Section */}
             <div className="signature-section">
